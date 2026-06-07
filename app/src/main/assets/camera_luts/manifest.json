@@ -1,0 +1,45 @@
+{
+  "k": 8,
+  "files": [
+    {
+      "cluster_id": 0,
+      "label": "Canon · Full-Frame · Cool",
+      "file": "cluster_0_Canon_Full_Frame_Cool.png"
+    },
+    {
+      "cluster_id": 1,
+      "label": "Canon · APS-C · Punchy Cool Muted Crushed",
+      "file": "cluster_1_Canon_APS_C_Punchy_Cool_Muted_Crushed.png"
+    },
+    {
+      "cluster_id": 2,
+      "label": "Canon · Full-Frame · Punchy Crushed",
+      "file": "cluster_2_Canon_Full_Frame_Punchy_Crushed.png"
+    },
+    {
+      "cluster_id": 3,
+      "label": "Canon · Full-Frame · Cool Crushed",
+      "file": "cluster_3_Canon_Full_Frame_Cool_Crushed.png"
+    },
+    {
+      "cluster_id": 4,
+      "label": "Canon · Full-Frame · Punchy Cool Muted",
+      "file": "cluster_4_Canon_Full_Frame_Punchy_Cool_Muted.png"
+    },
+    {
+      "cluster_id": 5,
+      "label": "Canon · Full-Frame · Punchy Cool Muted Crushed",
+      "file": "cluster_5_Canon_Full_Frame_Punchy_Cool_Muted_Crush.png"
+    },
+    {
+      "cluster_id": 6,
+      "label": "Canon · APS-C · Cool Muted",
+      "file": "cluster_6_Canon_APS_C_Cool_Muted.png"
+    },
+    {
+      "cluster_id": 7,
+      "label": "Canon · APS-C · Punchy Cool Crushed",
+      "file": "cluster_7_Canon_APS_C_Punchy_Cool_Crushed.png"
+    }
+  ]
+}

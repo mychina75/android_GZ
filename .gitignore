@@ -1,0 +1,21 @@
+.gradle/
+.downloads/
+build/
+app/build/
+build_tmp/
+deployment_outputs/
+local.properties
+apk_*.json
+apk_*.onnx
+apk_*.tflite
+
+# Large binary files that exceed GitHub limits
+*.apk
+*.onnx
+*.tflite
+app/src/main/assets/models/*.onnx
+app/src/main/assets/models/*.tflite
+
+# Large LUT PNG files
+app/src/main/assets/camera_luts/*.png
+!app/src/main/assets/camera_luts/manifest.json

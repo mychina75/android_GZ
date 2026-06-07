@@ -1,0 +1,465 @@
+{
+  "k": 8,
+  "clusters": [
+    {
+      "cluster_id": 0,
+      "label": "Canon · Full-Frame · Punchy Warm Crushed",
+      "member_count": 150,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 68
+        },
+        {
+          "brand": "Sony",
+          "count": 36
+        },
+        {
+          "brand": "Nikon",
+          "count": 26
+        },
+        {
+          "brand": "Olympus",
+          "count": 6
+        },
+        {
+          "brand": "Samsung",
+          "count": 3
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-7M3",
+          "count": 12
+        },
+        {
+          "model": "Canon Canon EOS 6D",
+          "count": 10
+        },
+        {
+          "model": "Nikon NIKON D750",
+          "count": 6
+        },
+        {
+          "model": "Sony ILCE-7M4",
+          "count": 4
+        },
+        {
+          "model": "Canon EOS 6D",
+          "count": 3
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 13.95,
+        "tone_highlights": -5.95,
+        "tone_shadows": -20.57,
+        "tone_saturation": -2.79,
+        "tone_highlight_warmth": 37.67,
+        "tone_shadow_tint": -87.67
+      },
+      "dominant_sensor_type": "full_frame"
+    },
+    {
+      "cluster_id": 1,
+      "label": "Canon · Full-Frame · Cool",
+      "member_count": 145,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 69
+        },
+        {
+          "brand": "Sony",
+          "count": 44
+        },
+        {
+          "brand": "Nikon",
+          "count": 11
+        },
+        {
+          "brand": "Samsung",
+          "count": 5
+        },
+        {
+          "brand": "Leica",
+          "count": 2
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-7M3",
+          "count": 15
+        },
+        {
+          "model": "Sony ILCE-7M2",
+          "count": 8
+        },
+        {
+          "model": "Canon Canon EOS 600D",
+          "count": 6
+        },
+        {
+          "model": "Canon Canon EOS 6D",
+          "count": 5
+        },
+        {
+          "model": "Canon Canon EOS 6D Mark II",
+          "count": 4
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 7.59,
+        "tone_highlights": -5.8,
+        "tone_shadows": -0.54,
+        "tone_saturation": 1.11,
+        "tone_highlight_warmth": -82.36,
+        "tone_shadow_tint": 22.18
+      },
+      "dominant_sensor_type": "full_frame"
+    },
+    {
+      "cluster_id": 2,
+      "label": "Nikon · APS-C · Muted",
+      "member_count": 120,
+      "top_camera_brands": [
+        {
+          "brand": "Nikon",
+          "count": 34
+        },
+        {
+          "brand": "Canon",
+          "count": 33
+        },
+        {
+          "brand": "Fujifilm",
+          "count": 26
+        },
+        {
+          "brand": "Sony",
+          "count": 19
+        },
+        {
+          "brand": "Olympus",
+          "count": 6
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Fujifilm X-T4",
+          "count": 9
+        },
+        {
+          "model": "Sony ILCE-6400",
+          "count": 7
+        },
+        {
+          "model": "Nikon NIKON D3300",
+          "count": 7
+        },
+        {
+          "model": "Nikon NIKON D5300",
+          "count": 6
+        },
+        {
+          "model": "Olympus E-M1MarkII",
+          "count": 6
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 1.14,
+        "tone_highlights": -10.38,
+        "tone_shadows": -2.82,
+        "tone_saturation": -42.95,
+        "tone_highlight_warmth": -0.17,
+        "tone_shadow_tint": 63.33
+      },
+      "dominant_sensor_type": "apsc"
+    },
+    {
+      "cluster_id": 3,
+      "label": "Canon · Full-Frame · Punchy Cool Muted Crushed",
+      "member_count": 162,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 83
+        },
+        {
+          "brand": "Sony",
+          "count": 39
+        },
+        {
+          "brand": "Nikon",
+          "count": 22
+        },
+        {
+          "brand": "Fujifilm",
+          "count": 3
+        },
+        {
+          "brand": "Olympus",
+          "count": 2
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-7M3",
+          "count": 11
+        },
+        {
+          "model": "Canon Canon EOS 6D",
+          "count": 10
+        },
+        {
+          "model": "Sony ILCE-7M2",
+          "count": 9
+        },
+        {
+          "model": "Sony ILCE-7RM3",
+          "count": 6
+        },
+        {
+          "model": "Nikon NIKON D750",
+          "count": 6
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 19.34,
+        "tone_highlights": -7.21,
+        "tone_shadows": -11.27,
+        "tone_saturation": -18.42,
+        "tone_highlight_warmth": -16.12,
+        "tone_shadow_tint": 96.18
+      },
+      "dominant_sensor_type": "full_frame"
+    },
+    {
+      "cluster_id": 4,
+      "label": "Canon · APS-C · Punchy Cool",
+      "member_count": 153,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 51
+        },
+        {
+          "brand": "Nikon",
+          "count": 37
+        },
+        {
+          "brand": "Fujifilm",
+          "count": 33
+        },
+        {
+          "brand": "Sony",
+          "count": 28
+        },
+        {
+          "brand": "Olympus",
+          "count": 2
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-6000",
+          "count": 16
+        },
+        {
+          "model": "Fujifilm X100F",
+          "count": 8
+        },
+        {
+          "model": "Nikon NIKON D3200",
+          "count": 7
+        },
+        {
+          "model": "Canon Canon EOS 80D",
+          "count": 6
+        },
+        {
+          "model": "Sony ILCE-6400",
+          "count": 6
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 38.61,
+        "tone_highlights": 2.53,
+        "tone_shadows": -6.21,
+        "tone_saturation": -13.89,
+        "tone_highlight_warmth": -91.41,
+        "tone_shadow_tint": 47.87
+      },
+      "dominant_sensor_type": "apsc"
+    },
+    {
+      "cluster_id": 5,
+      "label": "Canon · Full-Frame · Punchy Cool Muted Crushed",
+      "member_count": 124,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 64
+        },
+        {
+          "brand": "Sony",
+          "count": 37
+        },
+        {
+          "brand": "Nikon",
+          "count": 10
+        },
+        {
+          "brand": "Samsung",
+          "count": 3
+        },
+        {
+          "brand": "Panasonic",
+          "count": 2
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-7RM3",
+          "count": 9
+        },
+        {
+          "model": "Sony ILCE-7M3",
+          "count": 8
+        },
+        {
+          "model": "Canon Canon EOS 6D",
+          "count": 6
+        },
+        {
+          "model": "Sony ILCE-7M2",
+          "count": 5
+        },
+        {
+          "model": "Canon Canon EOS 5D Mark IV",
+          "count": 4
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 60.0,
+        "tone_highlights": 9.21,
+        "tone_shadows": -21.03,
+        "tone_saturation": -35.23,
+        "tone_highlight_warmth": -69.04,
+        "tone_shadow_tint": 4.97
+      },
+      "dominant_sensor_type": "full_frame"
+    },
+    {
+      "cluster_id": 6,
+      "label": "Nikon · APS-C · Punchy Warm Crushed",
+      "member_count": 107,
+      "top_camera_brands": [
+        {
+          "brand": "Nikon",
+          "count": 35
+        },
+        {
+          "brand": "Canon",
+          "count": 35
+        },
+        {
+          "brand": "Fujifilm",
+          "count": 24
+        },
+        {
+          "brand": "Sony",
+          "count": 13
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Nikon NIKON D3200",
+          "count": 7
+        },
+        {
+          "model": "Nikon NIKON D5600",
+          "count": 7
+        },
+        {
+          "model": "Canon Canon EOS 2000D",
+          "count": 5
+        },
+        {
+          "model": "Nikon NIKON D3300",
+          "count": 5
+        },
+        {
+          "model": "Fujifilm X-T3",
+          "count": 4
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 20.6,
+        "tone_highlights": -3.52,
+        "tone_shadows": -27.95,
+        "tone_saturation": 14.12,
+        "tone_highlight_warmth": 23.79,
+        "tone_shadow_tint": -57.79
+      },
+      "dominant_sensor_type": "apsc"
+    },
+    {
+      "cluster_id": 7,
+      "label": "Canon · Full-Frame · Cool Crushed",
+      "member_count": 39,
+      "top_camera_brands": [
+        {
+          "brand": "Canon",
+          "count": 15
+        },
+        {
+          "brand": "Sony",
+          "count": 12
+        },
+        {
+          "brand": "Nikon",
+          "count": 6
+        },
+        {
+          "brand": "Fujifilm",
+          "count": 3
+        },
+        {
+          "brand": "Pentax",
+          "count": 1
+        }
+      ],
+      "top_camera_models": [
+        {
+          "model": "Sony ILCE-7M3",
+          "count": 5
+        },
+        {
+          "model": "Sony ILCE-7RM3",
+          "count": 2
+        },
+        {
+          "model": "Sony ILCE-6000",
+          "count": 2
+        },
+        {
+          "model": "Nikon NIKON D5300",
+          "count": 2
+        },
+        {
+          "model": "Nikon NIKON Z 7_2",
+          "count": 2
+        }
+      ],
+      "mean_tone_params": {
+        "tone_contrast": 6.69,
+        "tone_highlights": -10.29,
+        "tone_shadows": -13.9,
+        "tone_saturation": 3.99,
+        "tone_highlight_warmth": -43.01,
+        "tone_shadow_tint": 99.9
+      },
+      "dominant_sensor_type": "full_frame"
+    }
+  ]
+}

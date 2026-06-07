@@ -1,0 +1,226 @@
+{
+  "nd_filter": {
+    "bias": -2.2,
+    "terms": [
+      {"type": "eq", "key": "scene_type", "class_id": 24, "weight": 2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 20, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 21, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 23, "weight": 1.4},
+      {"type": "eq", "key": "scene_type", "class_id": 17, "weight": 1.2},
+      {"type": "eq", "key": "scene_type", "class_id": 4, "weight": 0.9},
+      {"type": "eq", "key": "scene_type", "class_id": 15, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 14, "weight": 1.2},
+      {"type": "eq", "key": "scene_type", "class_id": 3, "weight": 0.6},
+      {"type": "eq", "key": "scene_type", "class_id": 0, "weight": 0.8},
+      {"type": "eq", "key": "scene_type", "class_id": 13, "weight": 0.8},
+      {"type": "eq", "key": "scene_type", "class_id": 7, "weight": -2.5},
+      {"type": "eq", "key": "scene_type", "class_id": 11, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 12, "weight": -1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 6, "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 8, "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 26, "weight": -1.0},
+      {"type": "eq", "key": "subject", "class_id": 14, "weight": -1.0},
+      {"type": "eq", "key": "subject", "class_id": 7, "weight": -0.8},
+      {"type": "eq", "key": "subject", "class_id": 9, "weight": -0.8},
+      {"type": "eq", "key": "subject", "class_id": 16, "weight": -1.5},
+      {"type": "eq", "key": "subject", "class_id": 19, "weight": 1.3},
+      {"type": "eq", "key": "subject", "class_id": 11, "weight": 1.0},
+      {"type": "eq", "key": "subject", "class_id": 21, "weight": 1.5},
+      {"type": "eq", "key": "subject", "class_id": 22, "weight": 0.7},
+      {"type": "eq", "key": "subject", "class_id": 10, "weight": 0.5},
+      {"type": "eq", "key": "motion", "class_id": 0, "weight": -2.0},
+      {"type": "eq", "key": "motion", "class_id": 1, "weight": 0.3},
+      {"type": "eq", "key": "motion", "class_id": 3, "weight": 0.8},
+      {"type": "eq", "key": "motion", "class_id": 4, "weight": 0.6},
+      {"type": "eq", "key": "motion", "class_id": 5, "weight": 1.5},
+      {"type": "eq", "key": "motion", "class_id": 6, "weight": 0.5},
+      {"type": "prob", "key": "is_repeating_motion", "weight": 0.3},
+      {"type": "prob", "key": "is_repeating_motion_flow", "weight": 0.3},
+      {"type": "gt", "key": "flow_magnitude", "thr": 0.3, "weight": 0.6},
+      {"type": "gt", "key": "brightness_value", "thr": 0.6, "weight": 1.5},
+      {"type": "prob", "key": "has_face", "weight": -1.5}
+    ]
+  },
+  "only_me": {
+    "bias": -2.0,
+    "terms": [
+      {"type": "prob", "key": "has_background_people", "weight": 3.5},
+      {"type": "eq", "key": "subject", "class_id": 0, "weight": 3.0},
+      {"type": "eq", "key": "subject", "class_id": 3, "weight": 2.0},
+      {"type": "eq", "key": "subject", "class_id": 2, "weight": 1.5},
+      {"type": "eq", "key": "subject", "class_id": 1, "weight": 0.8},
+      {"type": "range", "key": "face_count", "low": 0.5, "high": 1.5, "weight": 1.5},
+      {"type": "prob", "key": "has_face", "weight": 0.5},
+      {"type": "eq", "key": "scene_type", "class_id": 0, "weight": 1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 16, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 18, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 2, "weight": -0.3},
+      {"type": "prob", "key": "is_group_selfie", "weight": -0.3},
+      {"type": "prob", "key": "business_card", "weight": -1.0},
+      {"type": "prob", "key": "wifi_credential", "weight": -1.0},
+      {"type": "gate", "key": "has_background_people", "thr": 0.5, "weight": 0.0},
+      {"type": "gate", "key": "has_face", "thr": 0.5, "weight": 0.0}
+    ]
+  },
+  "miniature": {
+    "bias": -2.2,
+    "terms": [
+      {"type": "prob", "key": "motion_blur_present", "weight": 0.8},
+      {"type": "eq", "key": "scene_type", "class_id": 4, "weight": 1.2},
+      {"type": "eq", "key": "scene_type", "class_id": 23, "weight": 0.8},
+      {"type": "eq", "key": "scene_type", "class_id": 7, "weight": -1.5},
+      {"type": "eq", "key": "subject", "class_id": 11, "weight": 0.8},
+      {"type": "eq", "key": "subject", "class_id": 7, "weight": -0.8},
+      {"type": "gt", "key": "flow_magnitude", "thr": 0.15, "weight": 0.4},
+      {"type": "prob", "key": "has_face", "weight": -2.0},
+      {"type": "prob", "key": "business_card", "weight": -1.5},
+      {"type": "prob", "key": "wifi_credential", "weight": -1.5},
+      {"type": "gt", "key": "scene_depth_layers", "thr": 1.5, "weight": 1.2}
+    ]
+  },
+  "flash": {
+    "bias": -3.0,
+    "terms": [
+      {"type": "eq", "key": "lighting", "class_id": 0, "weight": 1.5},
+      {"type": "eq", "key": "lighting", "class_id": 1, "weight": 1.2},
+      {"type": "eq", "key": "lighting", "class_id": 7, "weight": 1.8},
+      {"type": "prob", "key": "has_face", "weight": 1.0},
+      {"type": "gt", "key": "face_count", "thr": 1.0, "weight": 0.4},
+      {"type": "gt", "key": "brightness_value", "thr": 0.6, "weight": -3.0},
+      {"type": "eq", "key": "lighting", "class_id": 4, "weight": -2.0},
+      {"type": "eq", "key": "lighting", "class_id": 5, "weight": -3.0},
+      {"type": "eq", "key": "lighting", "class_id": 6, "weight": -3.5},
+      {"type": "gate", "key": "brightness_value", "thr": 0.6, "default": 1.0, "weight": 0.0}
+    ]
+  },
+  "tele_portrait": {
+    "bias": -2.5,
+    "terms": [
+      {"type": "prob", "key": "has_face", "weight": 1.3},
+      {"type": "range", "key": "face_count", "low": 0.5, "high": 1.5, "weight": 2.0},
+      {"type": "gt", "key": "bbox_area", "thr": 0.28, "weight": 1.8},
+      {"type": "gt", "key": "sharpness_quality", "thr": 0.5, "weight": 1.0},
+      {"type": "gt", "key": "scene_depth_layers", "thr": 2.5, "weight": 1.2},
+      {"type": "gt", "key": "blur_level", "thr": 0.4, "weight": -2.5},
+      {"type": "eq", "key": "subject", "class_id": 2, "weight": 1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 0, "weight": 1.0},
+      {"type": "prob", "key": "has_background_people", "weight": -1.0},
+      {"type": "gt", "key": "face_count", "thr": 1.6, "weight": -3.5},
+      {"type": "gt", "key": "subject_count", "thr": 1.6, "weight": -1.5},
+      {"type": "eq", "key": "subject", "class_id": 1, "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 1, "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 2, "weight": -2.5},
+      {"type": "gate", "key": "has_face", "thr": 0.5, "weight": 0.0},
+      {"type": "gate", "key": "bg_sharp_ratio", "thr": 0.5, "default": 1.0, "weight": 0.15}
+    ]
+  },
+  "light_box": {
+    "bias": -2.5,
+    "terms": [
+      {"type": "eq", "key": "scene_type", "class_id": 7, "weight": 1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 6, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 11, "weight": 1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 12, "weight": 0.8},
+      {"type": "eq", "key": "scene_type", "class_id": 8, "weight": 0.5},
+      {"type": "eq", "key": "subject", "class_id": 14, "weight": 1.5},
+      {"type": "eq", "key": "subject", "class_id": 7, "weight": 0.8},
+      {"type": "eq", "key": "subject", "class_id": 9, "weight": 1.0},
+      {"type": "eq", "key": "subject", "class_id": 16, "weight": 0.8},
+      {"type": "gt", "key": "bbox_area", "thr": 0.3, "weight": 1.0},
+      {"type": "gt", "key": "bbox_edge_dist", "thr": 0.05, "weight": 0.6},
+      {"type": "gt", "key": "visual_complexity", "thr": 0.45, "weight": 0.8},
+      {"type": "prob", "key": "has_face", "weight": -2.0},
+      {"type": "prob", "key": "business_card", "weight": -2.5},
+      {"type": "prob", "key": "wifi_credential", "weight": -2.5},
+      {"type": "prob", "key": "has_text", "weight": -0.3},
+      {"type": "eq", "key": "scene_type", "class_id": 4, "weight": -1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 24, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 23, "weight": -0.8},
+      {"type": "prob", "key": "is_repeating_motion", "weight": -0.8}
+    ]
+  },
+  "uw_selfie": {
+    "bias": -3.0,
+    "terms": [
+      {"type": "eq", "key": "scene_type", "class_id": 2, "weight": 2.0},
+      {"type": "prob", "key": "is_group_selfie", "weight": 1.5},
+      {"type": "gt", "key": "face_count", "thr": 2.0, "weight": 1.5},
+      {"type": "gt", "key": "bbox_area", "thr": 0.25, "weight": 2.5},
+      {"type": "gt", "key": "bbox_edge_dist", "thr": 0.0, "weight": 1.5},
+      {"type": "eq", "key": "subject", "class_id": 0, "weight": -3.0},
+      {"type": "eq", "key": "subject", "class_id": 3, "weight": -2.0},
+      {"type": "gate", "key": "is_group_selfie", "thr": 0.5, "weight": 0.0},
+      {"type": "gate", "key": "subject_id", "thr": 0.5, "weight": 0.0}
+    ]
+  },
+  "lens_blocked": {
+    "bias": -1.8,
+    "terms": [
+      {"type": "prob", "key": "finger_cover", "weight": 3.0},
+      {"type": "gt", "key": "blur_level", "thr": 0.5, "weight": 0.05},
+      {"type": "prob", "key": "has_face", "weight": -1.5},
+      {"type": "prob", "key": "business_card", "weight": -1.5},
+      {"type": "prob", "key": "wifi_credential", "weight": -1.5},
+      {"type": "prob", "key": "has_text", "weight": -1.0},
+      {"type": "eq", "key": "scene_type", "class_id": 13, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 15, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 16, "weight": -1.5},
+      {"type": "gate", "key": "finger_cover", "thr": 0.6, "default": 0.0, "weight": 0.0}
+    ]
+  },
+  "out_of_focus": {
+    "bias": -2.0,
+    "terms": [
+      {"type": "gt", "key": "blur_level", "thr": 0.4, "weight": 2.0},
+      {"type": "inv", "key": "sharpness_quality", "weight": 1.5},
+      {"type": "inv", "key": "sharpness", "weight": 1.0},
+      {"type": "inv", "key": "overall_quality", "weight": 0.5},
+      {"type": "prob", "key": "has_face", "weight": 0.3},
+      {"type": "eq", "key": "subject", "class_id": 1, "weight": 0.3},
+      {"type": "eq", "key": "subject", "class_id": 0, "weight": 0.5},
+      {"type": "eq", "key": "scene_type", "class_id": 3, "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 4, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 14, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 25, "weight": -1.5},
+      {"type": "eq", "key": "subject", "class_id": 21, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 1, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 2, "weight": -1.5},
+      {"type": "prob", "key": "is_group_selfie", "weight": -1.0},
+      {"type": "prob", "key": "bg_sharp_ratio", "weight": 0.8},
+      {"type": "gate", "key": "has_face", "thr": 0.3, "weight": 0.1},
+      {"type": "gate", "key": "blur_level", "thr": 0.25, "weight": 0.1}
+    ]
+  },
+  "business_card": {
+    "bias": -1.3,
+    "terms": [
+      {"type": "prob", "key": "business_card", "weight": 2.0},
+      {"type": "prob", "key": "has_text", "weight": 0.15},
+      {"type": "prob", "key": "has_face", "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 0, "weight": -1.5},
+      {"type": "eq", "key": "scene_type", "class_id": 3, "weight": -1.5}
+    ]
+  },
+  "wifi_credential": {
+    "bias": -0.8,
+    "terms": [
+      {"type": "prob", "key": "wifi_credential", "weight": 1.6},
+      {"type": "prob", "key": "business_card", "weight": -0.5},
+      {"type": "prob", "key": "has_text", "weight": 0.15},
+      {"type": "prob", "key": "has_face", "weight": -2.0},
+      {"type": "eq", "key": "scene_type", "class_id": 0, "weight": -1.5}
+    ]
+  },
+  "__arbitration__": {
+    "groups": [
+      {"name": "portrait_family", "members": ["only_me", "tele_portrait", "uw_selfie"], "margin": 0.03},
+      {"name": "doc_family", "members": ["business_card", "wifi_credential"], "margin": 0.05},
+      {"name": "effect_family", "members": ["nd_filter", "miniature", "light_box"], "margin": 0.05}
+    ]
+  },
+  "__hysteresis__": {
+    "enter_frames": 3,
+    "exit_frames": 5,
+    "release_ratio": 0.7
+  }
+}

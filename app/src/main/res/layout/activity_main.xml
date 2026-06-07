@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <com.samsung.camera.intelligence.app.camera.CameraGLPreview
+        android:id="@+id/gl_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#12000000" />
+
+    <com.samsung.camera.intelligence.app.ui.GuidanceOverlayView
+        android:id="@+id/guidance_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Mimic Mode: right-side reference panel (3 cards) -->
+    <LinearLayout
+        android:id="@+id/mimic_panel_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="6dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/mimic_card_0"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_mimic_card_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:layout_marginBottom="6dp">
+
+            <ImageView
+                android:id="@+id/mimic_card_thumb_0"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/mimic_card_label_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pro\'s Shot 1"
+                    android:textColor="#FFB0C4FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mimic_card_info_0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textColor="#DDEEFFFF"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mimic_card_1"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_mimic_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:layout_marginBottom="6dp">
+
+            <ImageView
+                android:id="@+id/mimic_card_thumb_1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/mimic_card_label_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pro\'s Shot 2"
+                    android:textColor="#FFB0C4FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mimic_card_info_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textColor="#DDEEFFFF"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mimic_card_2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_mimic_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/mimic_card_thumb_2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/mimic_card_label_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pro\'s Shot 3"
+                    android:textColor="#FFB0C4FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/mimic_card_info_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textColor="#DDEEFFFF"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Style Straw: add gallery photo button -->
+        <ImageButton
+            android:id="@+id/mimic_add_straw_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Add style from gallery photo"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add_straw" />
+
+        <!-- Style Straw: gallery photo card (slot 3) wrapped in FrameLayout for overlay buttons -->
+        <FrameLayout
+            android:id="@+id/mimic_card_3_wrapper"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/mimic_card_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_mimic_card"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/mimic_card_thumb_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/mimic_card_label_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gallery Style"
+                        android:textColor="#FFB0C4FF"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/mimic_card_info_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:textColor="#DDEEFFFF"
+                        android:textSize="9sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Top-left: replace (pick another gallery photo) -->
+            <ImageView
+                android:id="@+id/mimic_straw_replace_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="start|top"
+                android:layout_margin="3dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Replace gallery style"
+                android:src="@drawable/ic_straw_replace" />
+
+            <!-- Top-right: close (remove gallery card) -->
+            <ImageView
+                android:id="@+id/mimic_straw_close_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="3dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Remove gallery style"
+                android:src="@drawable/ic_straw_close" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Mimic Mode: parameter display bar (above bottom console) -->
+    <TextView
+        android:id="@+id/mimic_param_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="140dp"
+        android:background="@drawable/bg_mimic_param_bar"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:textColor="#FFFFFFEE"
+        android:textSize="11sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/top_overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/status_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_status_pill"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:paddingStart="14dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="8dp"
+                android:text="@string/status_idle"
+                android:textColor="#EAF2FF"
+                android:textSize="11sp" />
+
+            <Button
+                android:id="@+id/btn_settings"
+                style="@style/SamsungMiniToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/open_settings" />
+
+            <Button
+                android:id="@+id/btn_filter_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_mode_suggest_pill"
+                android:minWidth="0dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="@string/filter_original"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFFFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/model_runtime_hint_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_chip"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:paddingStart="12dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="7dp"
+            android:text="@string/model_runtime_hint_idle"
+            android:textColor="#F7E8AF"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/guide_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_status_pill"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:paddingStart="14dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp"
+            android:text="@string/guide_idle"
+            android:textColor="#BEE8C8"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <HorizontalScrollView
+            android:id="@+id/trigger_recommendation_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/trigger_pill_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/trigger_debug_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_chip"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:paddingStart="12dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="7dp"
+            android:textColor="#D6F7FF"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_summary_live"
+                style="@style/SamsungMiniToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Live" />
+
+            <Button
+                android:id="@+id/btn_summary_features"
+                style="@style/SamsungMiniToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:text="Features" />
+
+            <Button
+                android:id="@+id/btn_summary_pipeline"
+                style="@style/SamsungMiniToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:text="Pipeline" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/analysis_summary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_chip"
+            android:maxLines="7"
+            android:padding="10dp"
+            android:text="@string/analysis_summary_idle"
+            android:textColor="#E4EEFF"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/feature_summary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_chip"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:text="@string/feature_summary_idle"
+            android:textColor="#D2E7FF"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/capability_summary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input_chip"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:text="@string/capability_summary_idle"
+            android:textColor="#C8D9F2"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/recording_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_recording_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/record_dot"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/bg_record_dot" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/recording_label"
+                android:textColor="#FFE7E7"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/record_timer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/recording_time_default"
+                android:textColor="#FFF8F8"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_console_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_glass_panel"
+        android:orientation="vertical"
+        android:paddingStart="14dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="12dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:minHeight="64dp">
+
+            <Button
+                android:id="@+id/btn_mode_current"
+                style="@style/SamsungModeChip"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="8dp"
+                android:text="@string/mode_photo" />
+
+            <FrameLayout
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_shutter_outer"
+                android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                <Button
+                    android:id="@+id/btn_capture"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_shutter_inner"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text=""
+                    android:textSize="0sp" />
+            </FrameLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Samsung-style Pro parameter bar (floating above bottom console, center) -->
+    <HorizontalScrollView
+        android:id="@+id/pro_param_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="156dp"
+        android:elevation="6dp"
+        android:fadeScrollbars="false"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pro_param_bar"
+            android:orientation="vertical"
+            android:paddingStart="8dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_iso"
+                    style="@style/ProParamInput"
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:text="100"
+                    android:inputType="number" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="#40FFFFFF" />
+
+                <EditText
+                    android:id="@+id/input_shutter"
+                    style="@style/ProParamInput"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:hint="1/60s"
+                    android:inputType="text" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="#40FFFFFF" />
+
+                <EditText
+                    android:id="@+id/input_ev"
+                    style="@style/ProParamInput"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:hint="±0.0"
+                    android:inputType="numberDecimal|numberSigned" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="#40FFFFFF" />
+
+                <EditText
+                    android:id="@+id/input_focus"
+                    style="@style/ProParamInput"
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:text="multi_pc"
+                    android:inputType="text" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="#40FFFFFF" />
+
+                <EditText
+                    android:id="@+id/input_wb"
+                    style="@style/ProParamInput"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:text="auto"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="4dp">
+
+                <Button
+                    android:id="@+id/btn_apply_recommended"
+                    style="@style/SamsungMiniToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:minWidth="72dp"
+                    android:minHeight="32dp"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:paddingStart="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="0dp"
+                    android:text="Apply All"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Auto-tone toggle pill — removed from preview, managed in Settings only -->
+
+    <!-- Mode suggestion pill (floating above bottom console, right side) -->
+    <LinearLayout
+        android:id="@+id/mode_suggest_pill"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="252dp"
+        android:elevation="6dp"
+        android:background="@drawable/bg_mode_suggest_pill"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/mode_suggest_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mode_suggest_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="📷"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/filter_strip_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="118dp"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/filter_strip_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp" />
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:id="@+id/photo_preview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF000000"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/photo_preview_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter" />
+
+        <com.samsung.camera.intelligence.app.ui.PhotoDefectOverlayView
+            android:id="@+id/photo_defect_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/photo_post_tools_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:background="#80000000"
+            android:padding="12dp"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/photo_defect_summary_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_status_pill"
+            android:paddingStart="12dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="8dp"
+            android:text="@string/photo_defect_summary_idle"
+            android:textColor="#EAF2FF"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btn_close_preview"
+            style="@style/SamsungMiniToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:text="✕ Close" />
+    </FrameLayout>
+
+</FrameLayout>

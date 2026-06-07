@@ -1,0 +1,15 @@
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="surface_scrim">#90000000</color>
+    <color name="accent">#5BA7FF</color>
+    <color name="warn">#F59E0B</color>
+    <color name="guide_info">#BEE8C8</color>
+    <color name="guide_suggestion">#9FD4FF</color>
+    <color name="guide_warning">#FFD37A</color>
+    <color name="guide_critical">#FF8B8B</color>
+    <color name="camera_panel_top">#D91A1B22</color>
+    <color name="camera_panel_bottom">#F50D0E13</color>
+    <color name="camera_text_primary">#EAF2FF</color>
+    <color name="camera_text_secondary">#B4C1D1</color>
+</resources>

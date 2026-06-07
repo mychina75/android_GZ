@@ -1,0 +1,246 @@
+plugins {
+    id 'com.android.application'
+}
+
+import java.util.Properties
+
+android {
+    namespace 'com.samsung.camera.intelligence.app'
+    compileSdk 35
+    ndkVersion '26.3.11579264'
+
+    androidResources {
+        noCompress += ['tflite', 'onnx']
+    }
+
+    defaultConfig {
+        applicationId "com.samsung.camera.intelligence.app"
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Restrict native libs to arm64 only. Without this filter the
+        // tensorflow-lite-select-tf-ops dependency adds ~80 MB per ABI for
+        // libtensorflowlite_flex_jni.so (x4 ABIs ≈ 280 MB), bloating the APK
+        // to ~500 MB. All target devices are arm64-v8a.
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+        // Native L0 trigger engine (gate/arbitration/hysteresis) + CV proxies.
+        // The rule logic is compiled into libcamera_native.so so no JSON is
+        // shipped in assets and the gating cannot be reverse-engineered.
+        externalNativeBuild {
+            cmake {
+                cppFlags '-std=c++17'
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packaging {
+        resources {
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}']
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += ['../src/main/java']
+            assets.srcDirs += ['../src/main/assets']
+        }
+        androidTest {
+            assets.srcDirs += ['../../deployment_outputs/tinynn']
+        }
+    }
+
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+
+    implementation 'androidx.camera:camera-core:1.4.1'
+    implementation 'androidx.camera:camera-camera2:1.4.1'
+    implementation 'androidx.camera:camera-lifecycle:1.4.1'
+    implementation 'androidx.camera:camera-view:1.4.1'
+    implementation 'androidx.camera:camera-video:1.4.1'
+
+    implementation 'org.tensorflow:tensorflow-lite:2.17.0'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.17.0'
+    implementation 'org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1'
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.26.0'
+    // Keep Select TF Ops for compatibility with auxiliary TFLite assets.
+    // The primary demo backbones are now FastViT ONNX split and CLIP ViT-B/32.
+
+    implementation 'androidx.concurrent:concurrent-futures:1.2.0'
+
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+}
+
+def resolveSdkDir = {
+    String fromEnv = System.getenv('ANDROID_HOME')
+    if (fromEnv != null && !fromEnv.trim().isEmpty()) {
+        return fromEnv
+    }
+
+    File localProps = rootProject.file('local.properties')
+    if (!localProps.exists()) {
+        return null
+    }
+
+    Properties props = new Properties()
+    localProps.withInputStream { stream -> props.load(stream) }
+    String sdkDir = props.getProperty('sdk.dir')
+    return sdkDir != null ? sdkDir.trim() : null
+}
+
+def resolveAdbExecutable = {
+    String sdkDir = resolveSdkDir()
+    if (sdkDir == null || sdkDir.isEmpty()) {
+        throw new RuntimeException('Android SDK path not found. Configure ANDROID_HOME or sdk.dir in local.properties.')
+    }
+
+    String adbName = org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'adb.exe' : 'adb'
+    File adb = new File(sdkDir, "platform-tools/${adbName}")
+    if (!adb.exists()) {
+        throw new RuntimeException("adb not found at: ${adb.absolutePath}")
+    }
+    return adb
+}
+
+tasks.register('runDeploymentOutputsDeviceSmokeTest') {
+    group = 'verification'
+    description = 'Builds app + androidTest APKs, installs them to a connected device, and runs TFLite deployment_outputs smoke test.'
+
+    dependsOn 'assembleDebug', 'assembleDebugAndroidTest'
+
+    doLast {
+        File adb = resolveAdbExecutable()
+
+        def runAdb = { List<String> args, boolean allowFailure = false ->
+            ByteArrayOutputStream output = new ByteArrayOutputStream()
+            def result = exec {
+                commandLine([adb.absolutePath] + args)
+                standardOutput = output
+                errorOutput = output
+                ignoreExitValue = true
+            }
+            String text = output.toString('UTF-8')
+            if (!allowFailure && result.exitValue != 0) {
+                throw new RuntimeException("adb ${args.join(' ')} failed with exit ${result.exitValue}\n${text}")
+            }
+            return text
+        }
+
+        String devices = runAdb(['devices'])
+        List<String> onlineDevices = devices.readLines().findAll { line ->
+            line != null && line.endsWith('\tdevice')
+        }
+        if (onlineDevices.isEmpty()) {
+            throw new RuntimeException('No online Android device detected. Connect a phone and enable USB debugging.')
+        }
+
+        File appApk = file("${buildDir}/outputs/apk/debug/app-debug.apk")
+        File testApk = file("${buildDir}/outputs/apk/androidTest/debug/app-debug-androidTest.apk")
+        if (!appApk.exists() || !testApk.exists()) {
+            throw new RuntimeException('APK artifacts missing. Ensure assembleDebug and assembleDebugAndroidTest succeeded.')
+        }
+
+        runAdb(['install', '-r', appApk.absolutePath])
+        runAdb(['install', '-r', testApk.absolutePath])
+
+        String instrumentation = runAdb([
+                'shell', 'am', 'instrument', '-w', '-r',
+                '-e', 'class', 'com.samsung.camera.intelligence.inference.TFLiteDeploymentOutputsDeviceTest',
+                'com.samsung.camera.intelligence.app.test/androidx.test.runner.AndroidJUnitRunner'
+        ])
+
+        if (!instrumentation.contains('OK (1 test)')) {
+            throw new RuntimeException('Device smoke test failed.\n' + instrumentation)
+        }
+
+        println('Device smoke test passed: deployment_outputs TFLite models can be loaded and executed.')
+    }
+}
+
+tasks.register('runVjepaTriggerDeviceSmokeTest') {
+    group = 'verification'
+    description = 'Builds app + androidTest APKs, installs them to a connected device, and runs the V-JEPA trigger split one-frame smoke test.'
+
+    dependsOn 'assembleDebug', 'assembleDebugAndroidTest'
+
+    doLast {
+        File adb = resolveAdbExecutable()
+
+        def runAdb = { List<String> args, boolean allowFailure = false ->
+            ByteArrayOutputStream output = new ByteArrayOutputStream()
+            def result = exec {
+                commandLine([adb.absolutePath] + args)
+                standardOutput = output
+                errorOutput = output
+                ignoreExitValue = true
+            }
+            String text = output.toString('UTF-8')
+            if (!allowFailure && result.exitValue != 0) {
+                throw new RuntimeException("adb ${args.join(' ')} failed with exit ${result.exitValue}\n${text}")
+            }
+            return text
+        }
+
+        String devices = runAdb(['devices'])
+        List<String> onlineDevices = devices.readLines().findAll { line ->
+            line != null && line.endsWith('\tdevice')
+        }
+        if (onlineDevices.isEmpty()) {
+            throw new RuntimeException('No online Android device detected. Connect a phone and enable USB debugging.')
+        }
+
+        File appApk = file("${buildDir}/outputs/apk/debug/app-debug.apk")
+        File testApk = file("${buildDir}/outputs/apk/androidTest/debug/app-debug-androidTest.apk")
+        if (!appApk.exists() || !testApk.exists()) {
+            throw new RuntimeException('APK artifacts missing. Ensure assembleDebug and assembleDebugAndroidTest succeeded.')
+        }
+
+        runAdb(['install', '-r', appApk.absolutePath])
+        runAdb(['install', '-r', testApk.absolutePath])
+
+        String instrumentation = runAdb([
+                'shell', 'am', 'instrument', '-w', '-r',
+                '-e', 'class', 'com.samsung.camera.intelligence.inference.TFLiteVjepaTriggerDeviceTest',
+                'com.samsung.camera.intelligence.app.test/androidx.test.runner.AndroidJUnitRunner'
+        ])
+
+        if (!instrumentation.contains('OK (1 test)')) {
+            throw new RuntimeException('V-JEPA trigger device smoke test failed.\n' + instrumentation)
+        }
+
+        println('Device smoke test passed: V-JEPA trigger split can initialize, attach direct heads, and process one frame.')
+    }
+}
