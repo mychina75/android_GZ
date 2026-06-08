@@ -57,6 +57,7 @@ public class CameraWorkflowStateMachine {
             Mode.FOOD,
             Mode.MACRO,
             Mode.PANORAMA,
+            Mode.MIMIC,
         };
     }
 

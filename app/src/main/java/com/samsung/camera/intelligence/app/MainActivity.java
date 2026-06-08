@@ -263,6 +263,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean showComposition = false;
     private boolean showGuidanceOverlay = false;
     private boolean autoModeSuggest = true;
+    // When true, a stable scene recommendation auto-switches the shooting mode
+    // (for the demo) instead of only showing a suggestion pill. Mimic/Pro are
+    // excluded and stay manual.
+    private boolean autoModeSwitch = true;
     private boolean filterStripVisible = false;
     @Nullable
     private Integer activeFilterClusterId = null;
@@ -1005,9 +1009,8 @@ public class MainActivity extends AppCompatActivity {
         if (photoPreviewController != null && photoPreviewController.isPreviewVisible()) {
             return;
         }
-        if (stateMachine.getCurrentMode() == CameraWorkflowStateMachine.Mode.PORTRAIT) {
-            schedulePortraitSegmentation(bitmap);
-        }
+        // Portrait mode no longer uses SINet segmentation/background blur — it
+        // applies a simple 1.5x crop + brightness lift in applyModePreviewEffect().
         if (filterStripVisible) {
             scheduleFilterThumbnailRefresh(bitmap);
         }
@@ -1423,6 +1426,19 @@ public class MainActivity extends AppCompatActivity {
         pendingModeName = null;
         lastModeDialogAtMs = now;
 
+        // Demo behavior: for the core shooting modes, auto-switch directly when a
+        // scene recommendation has been stable, so the preview visibly reacts to
+        // content. Mimic and Pro remain manual (they change exposure/UI) and fall
+        // back to the suggestion pill.
+        CameraWorkflowStateMachine.Mode recMode =
+                CameraWorkflowStateMachine.fromModeName(recommendedModeName);
+        if (autoModeSwitch && isAutoSwitchableMode(recMode)) {
+            hideModeSuggestPill(false);
+            switchMode(recMode);
+            setStatus("Auto mode -> " + recommendedModeName);
+            return;
+        }
+
         // Show the suggestion pill button instead of a dialog
         pillModeName = recommendedModeName;
         pillToolResult = result;
@@ -1435,6 +1451,24 @@ public class MainActivity extends AppCompatActivity {
         // Auto-hide the pill after 8 seconds if not tapped
         modeSuggestPill.removeCallbacks(pillAutoHideRunnable);
         modeSuggestPill.postDelayed(pillAutoHideRunnable, 8_000L);
+    }
+
+    /** Shooting modes that auto-switch from preview content in the demo.
+     *  Mimic (needs user intent + MasterMatch) and Pro (manual exposure) are
+     *  excluded and continue to use the suggestion pill. */
+    private static boolean isAutoSwitchableMode(CameraWorkflowStateMachine.Mode mode) {
+        if (mode == null) return false;
+        switch (mode) {
+            case PHOTO:
+            case NIGHT:
+            case FOOD:
+            case PORTRAIT:
+            case MACRO:
+            case PANORAMA:
+                return true;
+            default:
+                return false;
+        }
     }
 
     private final Runnable pillAutoHideRunnable = () -> hideModeSuggestPill(true);
@@ -2900,14 +2934,22 @@ public class MainActivity extends AppCompatActivity {
         preview.clearPortraitMask();
         switch (mode) {
             case NIGHT:
-                preview.updateEnhancement(4, new float[]{1.45f, 0.92f, 0.28f});
+                // Night: lift shadows, suppress highlights, reduce noise.
+                // params: [uNightGamma (shadow lift), uNightHighlightCap, uNightDenoise]
+                preview.updateEnhancement(4, new float[]{1.6f, 0.82f, 0.45f});
                 activeEnhancementLabel = "Night preview";
                 break;
             case FOOD:
-                preview.updateEnhancement(5, new float[]{1.18f, 0.07f, 0.04f});
+                // Food: vivid color + warm tone for a more appetizing look.
+                // params: [uFoodSaturation (mix factor), uFoodWarmR, uFoodWarmG]
+                preview.updateEnhancement(5, new float[]{1.5f, 0.10f, 0.045f});
+                // Slight global brightness lift to make food "pop".
+                preview.updateZoomBrightness(1.0f, 1.05f);
                 activeEnhancementLabel = "Food preview";
                 break;
             case PANORAMA:
+                // Panorama: crop top/bottom 30% each (true 21:9 black matte) + guide line + arrow.
+                // params: [uPanoramaBand=0.30, uPanoramaLineWidth]
                 preview.updateEnhancement(6, new float[]{0.30f, 0.0045f});
                 activeEnhancementLabel = "Panorama preview";
                 break;
@@ -2916,7 +2958,9 @@ public class MainActivity extends AppCompatActivity {
                 activeEnhancementLabel = "Macro preview";
                 break;
             case PORTRAIT:
-                preview.updateEnhancement(7, new float[]{0.5f, 0.5f, 0.12f, 0.55f, 0.95f});
+                // Portrait: no SINet segmentation / background blur. Just a 1.5x
+                // crop (zoom-in) with a slight brightness lift.
+                preview.updateZoomBrightness(1.5f, 1.08f);
                 activeEnhancementLabel = "Portrait preview";
                 break;
             default:

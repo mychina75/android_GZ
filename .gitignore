@@ -15,7 +15,3 @@ apk_*.tflite
 *.tflite
 app/src/main/assets/models/*.onnx
 app/src/main/assets/models/*.tflite
-
-# Large LUT PNG files
-app/src/main/assets/camera_luts/*.png
-!app/src/main/assets/camera_luts/manifest.json

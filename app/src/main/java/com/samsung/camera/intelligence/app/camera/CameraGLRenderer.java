@@ -106,6 +106,10 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             "uniform float uPortraitInnerRadius;\n" +
             "uniform float uPortraitOuterRadius;\n" +
             "uniform float uPortraitBlurStrength;\n" +
+            "// Global zoom/brightness/time uniforms\n" +
+            "uniform float uZoom;\n" +
+            "uniform float uBrightness;\n" +
+            "uniform float uTime;\n" +
             "// T3 USM uniforms\n" +
             "uniform float uUsmEnabled;\n" +
             "uniform float uUsmStrength;\n" +
@@ -135,7 +139,9 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             "}\n" +
             "\n" +
             "void main() {\n" +
-            "    vec4 color = texture2D(uCameraTexture, vTexCoord);\n" +
+            "    // Global crop/zoom: sample a smaller central region to zoom in\n" +
+            "    vec2 srcCoord = (vTexCoord - 0.5) / max(uZoom, 0.0001) + 0.5;\n" +
+            "    vec4 color = texture2D(uCameraTexture, srcCoord);\n" +
             "    // T3 USM: sharpen raw signal before grading\n" +
             "    if (uUsmEnabled > 0.5) {\n" +
             "        vec3 blurred = texture2D(uBlurTexture, vTexCoord).rgb;\n" +
@@ -187,17 +193,20 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             "        color.r = min(1.0, color.r + uFoodWarmR);\n" +
             "        color.g = min(1.0, color.g + uFoodWarmG);\n" +
             "    }\n" +
-            "    // T2 Mode 6: Panorama matte + guide line + arrow\n" +
+            "    // T2 Mode 6: Panorama ultra-wide crop (black matte) + green guide line + moving arrow\n" +
             "    if (uEnhanceMode == 6) {\n" +
             "        if (vTexCoord.y < uPanoramaBand || vTexCoord.y > 1.0 - uPanoramaBand) {\n" +
-            "            color.rgb *= 0.18;\n" +
+            "            color.rgb = vec3(0.0);\n" +
+            "        } else {\n" +
+            "            float lineMask = 1.0 - smoothstep(0.0, uPanoramaLineWidth, abs(vTexCoord.y - 0.5));\n" +
+            "            float arrowX = mix(uPanoramaBand + 0.08, 0.92, fract(uTime * 0.18));\n" +
+            "            float bodyStart = arrowX - 0.14;\n" +
+            "            float arrowBody = step(bodyStart, vTexCoord.x) * step(vTexCoord.x, arrowX) * (1.0 - smoothstep(0.0, uPanoramaLineWidth * 1.4, abs(vTexCoord.y - 0.5)));\n" +
+            "            float headSpan = max(0.0, (arrowX + 0.05 - vTexCoord.x)) * 0.6;\n" +
+            "            float arrowHead = step(arrowX, vTexCoord.x) * step(vTexCoord.x, arrowX + 0.05) * step(abs(vTexCoord.y - 0.5), headSpan);\n" +
+            "            float guide = max(lineMask, max(arrowBody, arrowHead));\n" +
+            "            color.rgb = mix(color.rgb, vec3(0.16, 0.94, 0.42), clamp(guide, 0.0, 1.0));\n" +
             "        }\n" +
-            "        float lineMask = 1.0 - smoothstep(0.0, uPanoramaLineWidth, abs(vTexCoord.y - 0.5));\n" +
-            "        float arrowBody = step(0.56, vTexCoord.x) * step(vTexCoord.x, 0.72) * (1.0 - smoothstep(0.0, uPanoramaLineWidth * 1.4, abs(vTexCoord.y - 0.5)));\n" +
-            "        float headSpan = max(0.0, 0.82 - vTexCoord.x) * 0.45;\n" +
-            "        float arrowHead = step(0.72, vTexCoord.x) * step(abs(vTexCoord.y - 0.5), headSpan);\n" +
-            "        float guide = max(lineMask, max(arrowBody, arrowHead));\n" +
-            "        color.rgb = mix(color.rgb, vec3(0.16, 0.94, 0.42), clamp(guide, 0.0, 1.0));\n" +
             "    }\n" +
             "    // T2 Mode 7: Portrait preview blur with optional segmentation mask\n" +
             "    if (uEnhanceMode == 7 && uBlurAvailable > 0.5) {\n" +
@@ -207,6 +216,8 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             "        float blurMix = (1.0 - personMask) * mix(0.35, 1.0, radial) * uPortraitBlurStrength;\n" +
             "        color.rgb = mix(color.rgb, blurred, clamp(blurMix, 0.0, 1.0));\n" +
             "    }\n" +
+            "    // Global brightness lift (1.0 = unchanged)\n" +
+            "    color.rgb = clamp(color.rgb * uBrightness, 0.0, 1.0);\n" +
             "    gl_FragColor = color;\n" +
             "}\n";
 
@@ -289,6 +300,8 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
     private int uFoodSaturation, uFoodWarmR, uFoodWarmG;
     private int uPanoramaBand, uPanoramaLineWidth;
     private int uPortraitCenter, uPortraitInnerRadius, uPortraitOuterRadius, uPortraitBlurStrength;
+    // Global zoom/brightness/time uniform locations
+    private int uZoom, uBrightness, uTime;
     // T3 USM uniform locations (main shader)
     private int uBlurTexture, uUsmEnabled, uUsmStrength, uBlurAvailable;
     private int uMaskTexture, uMaskEnabled;
@@ -443,6 +456,13 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
     private boolean activeUsmEnabled = false;
     private float activeUsmStrength = 0;
 
+    // Global zoom/brightness state (1.0 = unchanged)
+    private float pendingZoom = 1.0f;
+    private float pendingBrightness = 1.0f;
+    private float activeZoom = 1.0f;
+    private float activeBrightness = 1.0f;
+    private final long renderStartNs = System.nanoTime();
+
     // Pending CameraX surface request
     private SurfaceRequest pendingRequest;
 
@@ -543,6 +563,9 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
         uPortraitInnerRadius = GLES20.glGetUniformLocation(programId, "uPortraitInnerRadius");
         uPortraitOuterRadius = GLES20.glGetUniformLocation(programId, "uPortraitOuterRadius");
         uPortraitBlurStrength = GLES20.glGetUniformLocation(programId, "uPortraitBlurStrength");
+        uZoom              = GLES20.glGetUniformLocation(programId, "uZoom");
+        uBrightness        = GLES20.glGetUniformLocation(programId, "uBrightness");
+        uTime              = GLES20.glGetUniformLocation(programId, "uTime");
         // T3 USM uniforms (main shader)
         uBlurTexture   = GLES20.glGetUniformLocation(programId, "uBlurTexture");
         uUsmEnabled    = GLES20.glGetUniformLocation(programId, "uUsmEnabled");
@@ -683,6 +706,9 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             // Sync T3 USM state
             activeUsmEnabled = pendingUsmEnabled;
             activeUsmStrength = pendingUsmStrength;
+            // Sync global zoom/brightness state
+            activeZoom = pendingZoom;
+            activeBrightness = pendingBrightness;
             if (pendingMaskBitmap != null) {
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE3);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, maskTextureId);
@@ -745,6 +771,11 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
         // T2 enhancement uniforms
         GLES20.glUniform1i(uEnhanceMode, activeEnhanceMode);
         setEnhancementUniforms();
+
+        // Global zoom/brightness/time uniforms
+        GLES20.glUniform1f(uZoom, activeZoom);
+        GLES20.glUniform1f(uBrightness, activeBrightness);
+        GLES20.glUniform1f(uTime, (float) ((System.nanoTime() - renderStartNs) / 1_000_000_000.0));
 
         // T3 USM uniforms
         GLES20.glUniform1f(uUsmEnabled, (blurTexId >= 0 && activeUsmEnabled) ? 1.0f : 0.0f);
@@ -1012,6 +1043,19 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
     }
 
     /**
+     * Set global crop/zoom (1.0 = none) and brightness multiplier (1.0 = none).
+     * Used by mode previews such as Portrait (1.5x crop + slight brightness).
+     * Thread-safe.
+     */
+    public void updateZoomBrightness(float zoom, float brightness) {
+        synchronized (lutLock) {
+            pendingZoom = zoom;
+            pendingBrightness = brightness;
+        }
+        requestRender();
+    }
+
+    /**
      * Clear all enhancements (T2 + T3). Thread-safe.
      */
     public void clearEnhancements() {
@@ -1021,6 +1065,8 @@ public class CameraGLRenderer implements GLSurfaceView.Renderer {
             pendingUsmEnabled = false;
             pendingUsmRadius = 0;
             pendingUsmStrength = 0;
+            pendingZoom = 1.0f;
+            pendingBrightness = 1.0f;
         }
         requestRender();
     }

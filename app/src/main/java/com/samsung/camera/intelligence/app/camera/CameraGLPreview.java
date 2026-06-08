@@ -155,6 +155,14 @@ public class CameraGLPreview extends GLSurfaceView {
     }
 
     /**
+     * Set global crop/zoom (1.0 = none) and brightness multiplier (1.0 = none).
+     * Used by Portrait mode (1.5x crop + slight brightness). Thread-safe.
+     */
+    public void updateZoomBrightness(float zoom, float brightness) {
+        renderer.updateZoomBrightness(zoom, brightness);
+    }
+
+    /**
      * Clear all scene enhancements (T2 shader + T3 USM). Thread-safe.
      */
     public void clearEnhancements() {
